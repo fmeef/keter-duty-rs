@@ -27,13 +27,22 @@ lazy_static! {
 }
 
 #[derive(Parser, Debug)]
+/// Wrapper for macos sandbox-exec (seatbelt) scripts
+#[clap(author, version, about, long_about = None)]
 struct Args {
+    /// Relative path of the sandbox config
     #[clap(value_parser)]
     name: PathBuf,
+
+    /// Path of the executable to sandbox
     #[clap(value_parser)]
     exe: PathBuf,
+
+    /// Alternative templates directory
     #[clap(value_parser)]
     templates_dir: Option<PathBuf>,
+
+    /// Arguments to pass to the executable
     #[clap(value_parser)]
     args: Vec<String>,
 }
