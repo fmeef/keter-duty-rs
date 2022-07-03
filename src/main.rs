@@ -76,15 +76,15 @@ fn populate_sb_tree<'a, T: AsRef<Path>>(dir: &Dir<'a>, base_path: &T) -> Result<
     Ok(())
 }
 
-fn include(path: &HashMap<String, Value>) -> std::result::Result<Value, tera::Error> {
+fn include(path: &HashMap<String, Value>) -> Result<Value, tera::Error> {
     match path.get("path") {
         Some(val) => match from_value::<String>(val.clone()) {
-            std::result::Result::Ok(v) => {
+            Result::Ok(v) => {
                 let res = run_template(TERA.deref(), &v).map_err(|v| {
                     let v: tera::Error = v.to_string().into();
                     v
                 })?;
-                std::result::Result::Ok(to_value(&res)?)
+                Result::Ok(to_value(&res)?)
             }
 
             Err(_) => Err("failed".into()),
