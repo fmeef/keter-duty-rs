@@ -1,7 +1,7 @@
 use anyhow::{anyhow, Result};
 use clap::Parser;
 use include_dir::{include_dir, Dir, DirEntry};
-use lazy_static::{__Deref, lazy_static};
+use once_cell::sync::Lazy;
 use std::{
     collections::HashMap,
     fs,
@@ -18,15 +18,18 @@ static SANDBOX_DIR: Dir<'_> = include_dir!("sb");
 /// Directory to store default and user templates
 static LIBRARY_DIR: &str = "Library/Application Support/KeterDuty";
 
-lazy_static! {
-    static ref TERA: Tera = {
-        let library_path = get_library_path().expect("failed to get library path");
-        let mut tera = Tera::new(&format!("{}/**/*.sb", library_path.to_string_lossy()))
-            .expect("failed to setup tera");
-        tera.register_function("include", &include);
-        tera
-    };
-}
+static TERA: Lazy<Tera> = Lazy::new(|| {
+    let library_glob = get_library_path()
+        .expect("failed to get library path")
+        .join("**.sb")
+        .to_str()
+        .expect("invalid UTF-8 in library path")
+        .to_owned();
+
+    let mut tera = Tera::new(&library_glob).expect("failed to initialize Tera");
+    tera.register_function("include", include);
+    tera
+});
 
 #[derive(Parser, Debug)]
 /// Wrapper for macos sandbox-exec (seatbelt) scripts
@@ -116,8 +119,10 @@ fn sandbox_exec(rendered: &str, path: &Path, args: &[String]) -> Result<()> {
 fn run_sb(args: Args) -> Result<()> {
     let library_path = get_library_path()?;
     populate_sb_tree(&SANDBOX_DIR, &library_path)?;
-    let template = run_template(TERA.deref(), &args.name)?;
-    sandbox_exec(&template, &args.exe, &args.args)?;
+
+    let profile = run_template(&TERA, &args.name)?;
+    sandbox_exec(&profile, &args.exe, &args.args)?;
+
     Ok(())
 }
 
