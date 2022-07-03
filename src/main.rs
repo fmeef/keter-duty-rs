@@ -1,5 +1,6 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Context as _, Result};
 use clap::Parser;
+use directories::ProjectDirs;
 use include_dir::{include_dir, Dir, DirEntry};
 use once_cell::sync::Lazy;
 use std::{
@@ -7,16 +8,12 @@ use std::{
     fs,
     path::{Path, PathBuf},
     process::Command,
-    str::FromStr,
 };
 use tera::{Context, Tera, Value};
 use whoami::username;
 
 /// Default sandbox templates
 static SANDBOX_DIR: Dir<'_> = include_dir!("sb");
-
-/// Directory to store default and user templates
-static LIBRARY_DIR: &str = "Library/Application Support/KeterDuty";
 
 static TERA: Lazy<Tera> = Lazy::new(|| {
     let library_glob = get_library_path()
@@ -46,17 +43,6 @@ struct Args {
 
     /// Arguments to pass to the executable
     args: Vec<String>,
-}
-
-/// Get the path of the user's home directory
-fn get_home() -> Result<PathBuf> {
-    let mut buf = PathBuf::from_str("/Users/").unwrap();
-    buf.push(PathBuf::from_str(&username()).unwrap());
-    if buf.exists() {
-        Ok(buf)
-    } else {
-        Err(anyhow!("Path does not exist"))
-    }
 }
 
 /// Copy over default templates to config directory.
@@ -100,9 +86,12 @@ fn run_template<T: AsRef<str>>(tera: &Tera, template: T) -> Result<String, tera:
 
 /// Gets the library path including the user's home directory
 fn get_library_path() -> Result<PathBuf> {
-    let mut library_path = get_home()?;
-    library_path.push(PathBuf::from_str(LIBRARY_DIR)?);
-    Ok(library_path)
+    let project_dirs =
+        ProjectDirs::from("", "", "KeterDuty").context("Failed to determine project paths")?;
+
+    let data_dir = project_dirs.data_dir();
+    fs::create_dir_all(data_dir).context("Failed to ensure data dir exists")?;
+    Ok(data_dir.to_owned())
 }
 
 /// Runs sandbox-exec process with rendered template
