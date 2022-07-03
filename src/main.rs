@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Ok, Result};
+use anyhow::{anyhow, Result};
 use clap::Parser;
 use include_dir::{include_dir, Dir, DirEntry};
 use lazy_static::{__Deref, lazy_static};
@@ -10,7 +10,7 @@ use std::{
     process::Command,
     str::FromStr,
 };
-use tera::{from_value, to_value, Context, Tera, Value};
+use tera::{Context, Tera, Value};
 use whoami::username;
 
 /// Default sandbox templates
@@ -83,28 +83,20 @@ fn populate_sb_tree<'a, T: AsRef<Path>>(dir: &Dir<'a>, base_path: &T) -> Result<
 
 /// Handler for tera "include" function. Renders and inserts an additional template
 fn include(path: &HashMap<String, Value>) -> Result<Value, tera::Error> {
-    match path.get("path") {
-        Some(val) => match from_value::<String>(val.clone()) {
-            Result::Ok(v) => {
-                let res = run_template(TERA.deref(), &v).map_err(|v| {
-                    let v: tera::Error = v.to_string().into();
-                    v
-                })?;
-                Result::Ok(to_value(&res)?)
-            }
+    let template = path
+        .get("path")
+        .ok_or("invalid name")?
+        .as_str()
+        .ok_or("failed")?;
 
-            Err(_) => Err("failed".into()),
-        },
-        None => Err("invalid name".into()),
-    }
+    run_template(&TERA, template).map(Value::String)
 }
 
 /// Render a single template
-fn run_template<T: AsRef<str>>(tera: &Tera, template: &T) -> Result<String> {
+fn run_template<T: AsRef<str>>(tera: &Tera, template: T) -> Result<String, tera::Error> {
     let mut context = Context::new();
     context.insert("username", &username());
-    let rendered = tera.render(template.as_ref(), &context)?;
-    Ok(rendered)
+    tera.render(template.as_ref(), &context)
 }
 
 /// Gets the library path including the user's home directory
@@ -131,6 +123,7 @@ where
 
 fn run_sb(args: Args) -> Result<()> {
     let library_path = get_library_path()?;
+    SANDBOX_DIR.extract(&library_path)?;
     populate_sb_tree(&SANDBOX_DIR, &library_path)?;
     let template = run_template(TERA.deref(), &args.name.to_string_lossy())?;
     sandbox_exec(&template, &args.exe, args.args.into_iter())?;
