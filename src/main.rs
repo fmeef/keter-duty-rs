@@ -4,7 +4,6 @@ use include_dir::{include_dir, Dir, DirEntry};
 use lazy_static::{__Deref, lazy_static};
 use std::{
     collections::HashMap,
-    ffi::OsStr,
     fs::{create_dir_all, write},
     path::{Path, PathBuf},
     process::Command,
@@ -31,22 +30,18 @@ lazy_static! {
 
 #[derive(Parser, Debug)]
 /// Wrapper for macos sandbox-exec (seatbelt) scripts
-#[clap(author, version, about, long_about = None)]
+#[clap(author, version, about)]
 struct Args {
     /// Relative path of the sandbox config
-    #[clap(value_parser)]
-    name: PathBuf,
+    name: String,
 
     /// Path of the executable to sandbox
-    #[clap(value_parser)]
     exe: PathBuf,
 
     /// Alternative templates directory
-    #[clap(value_parser)]
     templates_dir: Option<PathBuf>,
 
     /// Arguments to pass to the executable
-    #[clap(value_parser)]
     args: Vec<String>,
 }
 
@@ -107,11 +102,7 @@ fn get_library_path() -> Result<PathBuf> {
 }
 
 /// Runs sandbox-exec process with rendered template
-fn sandbox_exec<I, S>(rendered: &str, path: &PathBuf, args: I) -> Result<()>
-where
-    I: IntoIterator<Item = S>,
-    S: AsRef<OsStr>,
-{
+fn sandbox_exec(rendered: &str, path: &Path, args: &[String]) -> Result<()> {
     Command::new("sandbox-exec")
         .arg("-p")
         .arg(rendered)
@@ -125,8 +116,8 @@ fn run_sb(args: Args) -> Result<()> {
     let library_path = get_library_path()?;
     SANDBOX_DIR.extract(&library_path)?;
     populate_sb_tree(&SANDBOX_DIR, &library_path)?;
-    let template = run_template(TERA.deref(), &args.name.to_string_lossy())?;
-    sandbox_exec(&template, &args.exe, args.args.into_iter())?;
+    let template = run_template(TERA.deref(), &args.name)?;
+    sandbox_exec(&template, &args.exe, &args.args)?;
     Ok(())
 }
 
@@ -135,10 +126,7 @@ fn main() -> Result<()> {
     if SANDBOX_DIR.contains(&args.name) {
         run_sb(args)?;
     } else {
-        println!(
-            "config {} doesn't exist",
-            args.name.to_str().expect("path contains invalid unicode")
-        );
+        println!("config {} doesn't exist", args.name);
     }
 
     Ok(())
