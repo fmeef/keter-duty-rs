@@ -1,0 +1,33 @@
+(version 1)
+;; Disallow everything by default
+(deny default)
+
+{{ include (path= "app.sb") }}
+
+(allow process-exec*
+			 (regex #"^/Applications/DeSmuME [0-9]+.app/.*")
+			 (regex #"^/Library/Internet Plug-Ins/.*")
+			 )
+
+(allow file-read*
+		(regex  #"^/Applications/DeSmuME [0-9]+.app/.*")
+		(path "/Applications/DeSmuME 20210906.app")
+		(regex #"^/Users/[A-Za-z]+/Downloads/.*")
+)
+
+(allow file-read* file-write*
+		(regex  #"^/Applications/DeSmuME [0-9]+.app/.*")
+		(regex #"^/Users/[A-Za-z]+/Library/Application Support/DeSmuME")
+    (regex #"/private/var/folders/pz/.+/[A-Z]/.*DeSmuME [0-9]+.*")
+)
+
+(allow user-preference-read user-preference-write
+		(preference-domain "org.desmume.DeSmuME")
+)
+
+(allow mach-lookup
+	(global-name "com.apple.touchbarserver.mig")
+	(global-name "com.apple.CARenderServer")
+	(global-name "com.apple.coreservices.sharedfilelistd.xpc")
+	(global-name "com.apple.DiskArbitration.diskarbitrationd")
+)

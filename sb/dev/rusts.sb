@@ -1,0 +1,14 @@
+(version 1)
+(allow default)
+
+{{ include (path= "shell.sb") }}
+
+(allow file-read* file-write*
+		(path "/Users/{{ name }}/Documents/rusts")
+		(path "/Users/{{ name }}/Documents")
+		(regex #"^/Users/{{ name }}/Documents/rusts/.*")
+		(regex #"^/bin/.*")
+)
+(allow process-exec* 
+	(regex #"^/bin/.*")
+)

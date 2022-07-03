@@ -1,0 +1,32 @@
+(version 1)
+;; Disallow everything by default
+(deny default)
+{{ include (path= "app.sb") }}
+
+(allow network*)
+(allow file-read*
+			 (path "/Users/{{ name }}")
+			 )
+(allow file-read* file-write*
+		(path "/Users/{{ name }}/Documents/game/ManyMC.app")
+		(path "/Users/{{ name }}/Library/Caches/JNA")
+		(path "/private/tmp")
+		(regex  #"^/Users/{{ name }}/Documents/game/ManyMC.app/.*")
+		(regex  #"^/Users/{{ name }}/Library/Caches/JNA.*")
+		(regex  #"^/private/tmp/.*")
+		(path "/Users/{{ name }}/Documents/game/m1-multimc-hack")
+		(path "/Users/{{ name }}/Library/Application Support/ManyMC")
+		(regex  #"^/Users/{{ name }}/Library/Application\ Support/ManyMC/.*")
+		(regex  #"^/Users/{{ name }}/Documents/game/m1-multimc-hack/.*")
+    (regex #"/private/var/folders/pz/.+/[A-Z]/.*ManyMC.*")
+)
+
+
+(allow mach-lookup 
+(global-name "com.apple.CARenderServer")
+(global-name "com.apple.speech.speechsynthesisd.x86_64")
+			)
+
+(allow user-preference-read
+(preference-domain "com.apple.HIToolbox")
+)

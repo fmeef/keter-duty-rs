@@ -1,0 +1,3 @@
+[submodule "sb/app/Discord-Sandbox-Profile"]
+	path = sb/app/Discord-Sandbox-Profile
+	url = https://github.com/Ozymandias42/Discord-Sandbox-Profile.git

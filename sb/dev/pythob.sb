@@ -1,0 +1,9 @@
+(version 1)
+(allow default)
+
+{{ include (path= "shell.sb") }}
+
+(allow file-read* file-write*
+		(path "/Users/{{ name }}/pythob")
+		(regex #"^/Users/[A-Za-z]+/pythob/.*")
+)

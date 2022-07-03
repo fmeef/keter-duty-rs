@@ -1,0 +1,18 @@
+(version 1)
+;; Disallow everything by default
+(allow default)
+
+
+(deny file-read* file-write*
+		(regex #"^/Users/[A-Za-z]+/.*")
+)
+
+(deny file-write* 
+	(regex #"^/opt/.*")
+	(regex #"^/usr/local/.*")
+)
+
+(deny user-preference-read user-preference-write)
+(deny iokit-open)
+(deny system-socket)
+
