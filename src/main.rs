@@ -13,7 +13,10 @@ use std::{
 use tera::{from_value, to_value, Context, Tera, Value};
 use whoami::username;
 
+/// Default sandbox templates
 static SANDBOX_DIR: Dir<'_> = include_dir!("sb");
+
+/// Directory to store default and user templates
 static LIBRARY_DIR: &str = "Library/Application Support/KeterDuty";
 
 lazy_static! {
@@ -47,6 +50,7 @@ struct Args {
     args: Vec<String>,
 }
 
+/// Get the path of the user's home directory
 fn get_home() -> Result<PathBuf> {
     let mut buf = PathBuf::from_str("/Users/").unwrap();
     buf.push(PathBuf::from_str(&username()).unwrap());
@@ -57,6 +61,7 @@ fn get_home() -> Result<PathBuf> {
     }
 }
 
+/// Copy over default templates to config directory, skipping any existing templates
 fn populate_sb_tree<'a, T: AsRef<Path>>(dir: &Dir<'a>, base_path: &T) -> Result<()> {
     let base_path = base_path.as_ref();
     for entry in dir.entries() {
@@ -76,6 +81,7 @@ fn populate_sb_tree<'a, T: AsRef<Path>>(dir: &Dir<'a>, base_path: &T) -> Result<
     Ok(())
 }
 
+/// Handler for tera "include" function. Renders and inserts an additional template
 fn include(path: &HashMap<String, Value>) -> Result<Value, tera::Error> {
     match path.get("path") {
         Some(val) => match from_value::<String>(val.clone()) {
@@ -93,6 +99,7 @@ fn include(path: &HashMap<String, Value>) -> Result<Value, tera::Error> {
     }
 }
 
+/// Render a single template
 fn run_template<T: AsRef<str>>(tera: &Tera, template: &T) -> Result<String> {
     let mut context = Context::new();
     context.insert("username", &username());
@@ -100,12 +107,14 @@ fn run_template<T: AsRef<str>>(tera: &Tera, template: &T) -> Result<String> {
     Ok(rendered)
 }
 
+/// Gets the library path including the user's home directory
 fn get_library_path() -> Result<PathBuf> {
     let mut library_path = get_home()?;
     library_path.push(PathBuf::from_str(LIBRARY_DIR)?);
     Ok(library_path)
 }
 
+/// Runs sandbox-exec process with rendered template
 fn sandbox_exec<I, S>(rendered: &str, path: &PathBuf, args: I) -> Result<()>
 where
     I: IntoIterator<Item = S>,
