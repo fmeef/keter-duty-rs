@@ -4,7 +4,7 @@ use include_dir::{include_dir, Dir, DirEntry};
 use lazy_static::{__Deref, lazy_static};
 use std::{
     collections::HashMap,
-    fs::{create_dir_all, write},
+    fs,
     path::{Path, PathBuf},
     process::Command,
     str::FromStr,
@@ -56,19 +56,20 @@ fn get_home() -> Result<PathBuf> {
     }
 }
 
-/// Copy over default templates to config directory, skipping any existing templates
-fn populate_sb_tree<'a, T: AsRef<Path>>(dir: &Dir<'a>, base_path: &T) -> Result<()> {
+/// Copy over default templates to config directory.
+/// Skips existing files, unlike [Dir::extract].
+fn populate_sb_tree<T: AsRef<Path>>(dir: &Dir<'_>, base_path: &T) -> Result<()> {
     let base_path = base_path.as_ref();
     for entry in dir.entries() {
         let path = base_path.join(entry.path());
         match entry {
             DirEntry::Dir(d) => {
-                create_dir_all(&path)?;
+                fs::create_dir_all(&path)?;
                 populate_sb_tree(d, &base_path)?;
             }
             DirEntry::File(file) => {
                 if !path.exists() {
-                    write(path, file.contents())?;
+                    fs::write(path, file.contents())?;
                 }
             }
         }
@@ -114,7 +115,6 @@ fn sandbox_exec(rendered: &str, path: &Path, args: &[String]) -> Result<()> {
 
 fn run_sb(args: Args) -> Result<()> {
     let library_path = get_library_path()?;
-    SANDBOX_DIR.extract(&library_path)?;
     populate_sb_tree(&SANDBOX_DIR, &library_path)?;
     let template = run_template(TERA.deref(), &args.name)?;
     sandbox_exec(&template, &args.exe, &args.args)?;
