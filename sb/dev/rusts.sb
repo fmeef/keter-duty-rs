@@ -4,9 +4,9 @@
 {{ include (path= "shell.sb") }}
 
 (allow file-read* file-write*
-		(path "/Users/{{ name }}/Documents/rusts")
-		(path "/Users/{{ name }}/Documents")
-		(regex #"^/Users/{{ name }}/Documents/rusts/.*")
+		(path "/Users/{{ username }}/Documents/rusts")
+		(path "/Users/{{ username }}/Documents")
+		(regex #"^/Users/{{ username }}/Documents/rusts/.*")
 		(regex #"^/bin/.*")
 )
 (allow process-exec* 

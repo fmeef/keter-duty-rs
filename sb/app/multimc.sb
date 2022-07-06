@@ -5,19 +5,19 @@
 
 (allow network*)
 (allow file-read*
-			 (path "/Users/{{ name }}")
+			 (path "/Users/{{ username }}")
 			 )
 (allow file-read* file-write*
-		(path "/Users/{{ name }}/Documents/game/ManyMC.app")
-		(path "/Users/{{ name }}/Library/Caches/JNA")
+		(path "/Users/{{ username }}/Documents/game/ManyMC.app")
+		(path "/Users/{{ username }}/Library/Caches/JNA")
 		(path "/private/tmp")
-		(regex  #"^/Users/{{ name }}/Documents/game/ManyMC.app/.*")
-		(regex  #"^/Users/{{ name }}/Library/Caches/JNA.*")
+		(regex  #"^/Users/{{ username }}/Documents/game/ManyMC.app/.*")
+		(regex  #"^/Users/{{ username }}/Library/Caches/JNA.*")
 		(regex  #"^/private/tmp/.*")
-		(path "/Users/{{ name }}/Documents/game/m1-multimc-hack")
-		(path "/Users/{{ name }}/Library/Application Support/ManyMC")
-		(regex  #"^/Users/{{ name }}/Library/Application\ Support/ManyMC/.*")
-		(regex  #"^/Users/{{ name }}/Documents/game/m1-multimc-hack/.*")
+		(path "/Users/{{ username }}/Documents/game/m1-multimc-hack")
+		(path "/Users/{{ username }}/Library/Application Support/ManyMC")
+		(regex  #"^/Users/{{ username }}/Library/Application\ Support/ManyMC/.*")
+		(regex  #"^/Users/{{ username }}/Documents/game/m1-multimc-hack/.*")
     (regex #"/private/var/folders/pz/.+/[A-Z]/.*ManyMC.*")
 )
 

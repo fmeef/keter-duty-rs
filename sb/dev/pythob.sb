@@ -4,6 +4,6 @@
 {{ include (path= "shell.sb") }}
 
 (allow file-read* file-write*
-		(path "/Users/{{ name }}/pythob")
-		(regex #"^/Users/[A-Za-z]+/pythob/.*")
+		(path "/Users/{{ username }}/pythob")
+		(regex #"^/Users/{{ username }}/pythob/.*")
 )

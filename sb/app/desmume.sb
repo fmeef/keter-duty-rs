@@ -12,12 +12,12 @@
 (allow file-read*
 		(regex  #"^/Applications/DeSmuME [0-9]+.app/.*")
 		(path "/Applications/DeSmuME 20210906.app")
-		(regex #"^/Users/[A-Za-z]+/Downloads/.*")
+		(regex #"^/Users/{{ username }}/Downloads/.*")
 )
 
 (allow file-read* file-write*
 		(regex  #"^/Applications/DeSmuME [0-9]+.app/.*")
-		(regex #"^/Users/[A-Za-z]+/Library/Application Support/DeSmuME")
+		(regex #"^/Users/{{ username }}/Library/Application Support/DeSmuME")
     (regex #"/private/var/folders/pz/.+/[A-Z]/.*DeSmuME [0-9]+.*")
 )
 

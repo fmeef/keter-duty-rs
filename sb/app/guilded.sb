@@ -9,7 +9,7 @@
 			 )
 (allow device-microphone)
 (allow file-read*
-		(path "/Users/{{ name }}")
+		(path "/Users/{{ username }}")
 		(path "/Applications/Guilded.app")
 		(regex #"^/Applications/Guilded.app/.*")
 		(regex #"^/dev/.*")
@@ -52,13 +52,13 @@
 (allow file-read* file-write*
 		(path "/Applications/Guilded.app")
 		(regex #"^/Applications/Guilded.app/.*")
-	(path "/Users/{{ name }}/Library/Application Support/Guilded")
-   (regex #"^/Users/{{ name }}/Library/Application Support/Guilded/.*")
-	 (path "/Users/{{ name }}/Library/Saved Application State/")
-	 (regex #"^/Users/{{ name }}/Library/Saved Application State/.*")
+	(path "/Users/{{ username }}/Library/Application Support/Guilded")
+   (regex #"^/Users/{{ username }}/Library/Application Support/Guilded/.*")
+	 (path "/Users/{{ username }}/Library/Saved Application State/")
+	 (regex #"^/Users/{{ username }}/Library/Saved Application State/.*")
 		(regex #"^/dev/.*")
-		(path "/Users/{{ name }}/Library/Logs/Guilded")
-		(regex #"^/Users/{{ name }}/Library/Logs/Guilded/.*")
+		(path "/Users/{{ username }}/Library/Logs/Guilded")
+		(regex #"^/Users/{{ username }}/Library/Logs/Guilded/.*")
 			 )
 (allow network-bind)
 (allow mach-register
