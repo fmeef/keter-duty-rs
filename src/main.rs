@@ -1,6 +1,7 @@
 use anyhow::Result;
 use clap::Parser;
 use std::path::PathBuf;
+use utils::library_path_contains;
 
 pub(crate) mod template;
 pub(crate) mod utils;
@@ -34,7 +35,7 @@ fn run_sb(args: Args) -> Result<()> {
 
 fn main() -> Result<()> {
     let args = Args::parse();
-    if utils::SANDBOX_DIR.contains(&args.name) {
+    if utils::SANDBOX_DIR.contains(&args.name) || library_path_contains(&args.name)? {
         run_sb(args)?;
     } else {
         println!("config {} doesn't exist", args.name);

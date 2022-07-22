@@ -30,6 +30,19 @@ pub(crate) fn sandbox_exec(rendered: &str, path: &Path, args: &[String]) -> Resu
     Ok(())
 }
 
+/// Check if the library directory contains a given name
+pub(crate) fn library_path_contains(name: &str) -> Result<bool> {
+    let p = get_library_path()?;
+    for dir in p.read_dir()? {
+        if let Ok(dir) = dir {
+            if dir.file_name() == name {
+                return Ok(true);
+            }
+        }
+    }
+    Ok(false)
+}
+
 /// Copy over default templates to config directory.
 /// Skips existing files, unlike [Dir::extract].
 pub(crate) fn populate_sb_tree<T: AsRef<Path>>(dir: &Dir<'_>, base_path: &T) -> Result<()> {

@@ -1,0 +1,73 @@
+(version 1)
+;; Disallow everything by default
+(deny default)
+
+{{ include (path= "app.sb") }}
+
+(allow file-issue-extension
+		(regex #".*Applications/Discord.app/.*")
+			 )
+(allow device-microphone)
+
+(allow file-read*
+		(path "/Users/{{ username }}")
+		(path "/Applications/Discord.app")
+		(regex #"^/Applications/Discord.app/.*")
+		(regex #"^/dev/.*")
+		(path "/dev")
+		(path "/Library/Preferences/com.apple.networkd.plist")
+		(regex #"^/bin/.*")
+			 )
+
+(allow ipc-posix-shm*
+	(ipc-posix-name "com.apple.AppleDatabaseChanged")
+	(ipc-posix-name-regex #".*com.apple.csseed.*")
+)
+
+(allow iokit-open
+			 (iokit-user-client-class "IOHIDParamUserClient")
+    (iokit-registry-entry-class "AppleGraphicsControlClient")
+    (iokit-registry-entry-class "IGAccelCommandQueue")
+    (iokit-registry-entry-class "IGAccelDevice")
+    (iokit-registry-entry-class "IGAccelGLContext")
+    (iokit-registry-entry-class "IGAccelSharedUserClient")
+    (iokit-registry-entry-class "IGAccelVideoContextMain")
+    (iokit-registry-entry-class "IGAccelVideoContextMedia")
+    (iokit-registry-entry-class "IOAudioControlUserClient")
+    (iokit-registry-entry-class "IOAudioEngineUserClient")
+    (iokit-registry-entry-class "IOFramebufferSharedUserClient")
+    (iokit-registry-entry-class "IOHIDLibUserClient")
+    (iokit-registry-entry-class "IOHIDParamUserClient")
+    (iokit-registry-entry-class "IOSurfaceRootUserClient")
+    (iokit-registry-entry-class "IOSurfaceSendRight")
+    (iokit-registry-entry-class "RootDomainUserClient")
+    (iokit-registry-entry-class "nvDevice")
+    (iokit-registry-entry-class "nvFermiGLContext")
+    (iokit-registry-entry-class "nvSharedUserClient")
+
+			 )
+(allow file-ioctl
+		(regex #"^/dev/.*")
+		(path "/dev")
+			 )
+(allow network-outbound)
+(allow network-inbound)
+(allow file-read* file-write*
+		(path "/Applications/Discord.app")
+		(regex #"^/Applications/Discord.app/.*")
+	(path "/Users/{{ username }}/Library/Application Support/discord")
+   (regex #"^/Users/{{ username }}/Library/Application Support/discord/.*")
+	 (path "/Users/{{ username }}/Library/Saved Application State/")
+	 (regex #"^/Users/{{ username }}/Library/Saved Application State/.*")
+		(regex #"^/dev/.*")
+		(path "/Users/{{ username }}/Library/Logs/Discord")
+		(regex #"^/Users/{{ username }}/Library/Logs/Discord/.*")
+			 )
+(allow network-bind)
+(allow mach-register
+		(global-name-regex #"^com\.hnc.Discord\..*")
+			 )
+(allow user-preference-read user-preference-write
+			(preference-domain "com.hnc.Discord")
+			(preference-domain "com.apple.messages.commsafety")
+			 )
