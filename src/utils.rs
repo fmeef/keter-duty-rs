@@ -26,7 +26,8 @@ pub(crate) fn sandbox_exec(rendered: &str, path: &Path, args: &[String]) -> Resu
         .arg(rendered)
         .arg(path)
         .args(args)
-        .output()?;
+        .spawn()?
+        .wait()?;
     Ok(())
 }
 
