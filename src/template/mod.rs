@@ -59,7 +59,9 @@ impl SandboxTemplate {
         let mut context = Context::new();
         context.insert("username", &username());
 
-        self.get_dirs_list()?;
+        let dirs = self.get_dirs_list()?;
+
+        context.insert("rwfiles", &dirs);
         let template = self
             .tera
             .get()

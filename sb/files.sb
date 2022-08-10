@@ -1,0 +1,8 @@
+;; TODO: twig template and include
+
+(allow file-read* file-write*
+{% for file in rwfiles -%}
+	(path "{{ file }}")
+	(regex #"^{{ file }}/.*")
+{%- endfor %}
+)

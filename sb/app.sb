@@ -89,3 +89,5 @@
 	(ipc-posix-name-regex #"^CFPBS:[A-Z0-9]+:")
 	(ipc-posix-name-regex #"^AudioIO[A-Za-z0-9]+")
 )
+
+{{ include (path= "files.sb") }}
