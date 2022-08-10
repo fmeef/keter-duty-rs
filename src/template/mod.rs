@@ -1,16 +1,14 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::{collections::HashMap, path::PathBuf, sync::Arc};
 
 use crate::{utils, Args};
 use anyhow::Result;
-use clap::Parser;
-use once_cell::sync::{Lazy, OnceCell};
+use once_cell::sync::OnceCell;
 use tera::{Context, Function, Tera, Value};
 use whoami::username;
 
-pub(crate) static ARGS: Lazy<Args> = Lazy::new(|| Args::parse());
-
-pub(crate) static TERA: Lazy<SandboxTemplate> = Lazy::new(|| SandboxTemplate::new(&ARGS));
-
+// rustc is very weird about HRTBs, use hack to remove HRTBs for our closure
+// to bind "self" to tera::Function. for a specific lifetime
+// This only works because we use the custom self type Arc<Self>
 fn bind<F>(func: F) -> impl Function
 where
     F: Fn(&HashMap<String, Value>) -> Result<Value, tera::Error> + Send + Sync,
@@ -18,19 +16,20 @@ where
     func
 }
 
-pub(crate) struct SandboxTemplate<'a> {
-    args: &'a Args,
+pub(crate) struct SandboxTemplate {
+    args: Arc<Args>,
     tera: OnceCell<Tera>,
 }
-impl SandboxTemplate<'static> {
-    pub(crate) fn new(args: &'static Args) -> Self {
-        Self {
+impl SandboxTemplate {
+    pub(crate) fn new(args: Arc<Args>) -> Arc<Self> {
+        let s = Self {
             args,
             tera: OnceCell::new(),
-        }
+        };
+        Arc::new(s)
     }
 
-    pub(crate) fn get_tera(&'static self) -> Result<()> {
+    pub(crate) fn get_tera(self: &Arc<Self>) -> Result<()> {
         let library_glob = utils::get_library_path()
             .expect("failed to get library path")
             .join("**.sb")
@@ -39,7 +38,8 @@ impl SandboxTemplate<'static> {
             .to_owned();
 
         let mut tera = Tera::new(&library_glob).expect("failed to initialize Tera");
-        let f = bind(|path| self.include(path));
+        let me = self.clone();
+        let f = bind(move |path| me.include(path));
         tera.register_function("include", f);
         self.tera.set(tera).unwrap();
         Ok(())

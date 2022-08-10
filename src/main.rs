@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::Parser;
-use std::path::PathBuf;
-use template::{ARGS, TERA};
+use std::{path::PathBuf, sync::Arc};
+use template::SandboxTemplate;
 use utils::library_path_contains;
 pub(crate) mod template;
 pub(crate) mod utils;
@@ -32,22 +32,28 @@ struct Args {
     args: Vec<String>,
 }
 
-fn run_sb() -> Result<()> {
+fn run_sb(args: Args) -> Result<()> {
     let library_path = utils::get_library_path()?;
     utils::populate_sb_tree(&utils::SANDBOX_DIR, &library_path)?;
 
-    let profile = TERA.run_template(&ARGS.name)?;
-    utils::sandbox_exec(&profile, &ARGS.exe, &ARGS.args)?;
+    let args = Arc::new(args);
+
+    let templates = SandboxTemplate::new(Arc::clone(&args));
+    templates.get_tera()?;
+
+    let template = templates.run_template(&args.name)?;
+
+    utils::sandbox_exec(&template, &args.exe, &args.args)?;
 
     Ok(())
 }
 
 fn main() -> Result<()> {
-    TERA.get_tera().unwrap();
-    if utils::SANDBOX_DIR.contains(&ARGS.name) || library_path_contains(&ARGS.name).unwrap() {
-        crate::run_sb().unwrap();
+    let args = Args::parse();
+    if utils::SANDBOX_DIR.contains(&args.name) || library_path_contains(&args.name).unwrap() {
+        crate::run_sb(args).unwrap();
     } else {
-        println!("config {} doesn't exist", ARGS.name);
+        println!("config {} doesn't exist", args.name);
     }
     Ok(())
 }
