@@ -4,15 +4,10 @@
 
 {{ include (path= "app.sb") }}
 
-(allow file-issue-extension
-		(regex #".*Applications/Discord.app/.*")
-			 )
 (allow device-microphone)
 
 (allow file-read*
 		(path "/Users/{{ username }}")
-		(path "/Applications/Discord.app")
-		(regex #"^/Applications/Discord.app/.*")
 		(regex #"^/dev/.*")
 		(path "/dev")
 		(path "/Library/Preferences/com.apple.networkd.plist")
@@ -55,6 +50,10 @@
 (allow file-read* file-write*
 		(path "/Applications/Discord.app")
 		(regex #"^/Applications/Discord.app/.*")
+		(path "/Users/{{ username }}/Library/Caches/com.hnc.Discord")
+		(regex #"^/Users/{{ username }}/Library/Caches/com.hnc.Discord/.*")
+		(path "/Users/{{ username }}/Library/Caches/com.hnc.Discord.ShipIt")
+		(regex #"^/Users/{{ username }}/Library/Caches/com.hnc.Discord.ShipIt/.*")
 	(path "/Users/{{ username }}/Library/Application Support/discord")
    (regex #"^/Users/{{ username }}/Library/Application Support/discord/.*")
 	 (path "/Users/{{ username }}/Library/Saved Application State/")

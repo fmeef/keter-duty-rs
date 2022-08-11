@@ -67,6 +67,7 @@ impl SandboxTemplate {
             .get()
             .unwrap()
             .render(template.as_ref(), &context)?;
+        println!("{}", template);
         Ok(template)
     }
 
