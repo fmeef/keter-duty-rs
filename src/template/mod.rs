@@ -16,6 +16,21 @@ where
     func
 }
 
+fn remove_trailing_slash(path: &[PathBuf]) -> Vec<String> {
+    path.iter()
+        .map(|v| remove_trailing_slash_single(v))
+        .collect()
+}
+
+fn remove_trailing_slash_single(v: &PathBuf) -> String {
+    let v = v.to_string_lossy();
+    if v.ends_with("/") {
+        v[0..v.len() - 1].to_owned()
+    } else {
+        v.into_owned()
+    }
+}
+
 pub(crate) struct SandboxTemplate {
     args: Arc<Args>,
     tera: OnceCell<Tera>,
@@ -45,13 +60,13 @@ impl SandboxTemplate {
         Ok(())
     }
 
-    pub(crate) fn get_dirs_list(&self) -> Result<Vec<PathBuf>> {
-        let mut res = self.args.dir.clone();
+    pub(crate) fn get_dirs_list(&self) -> Result<Vec<String>> {
+        let mut res = remove_trailing_slash(self.args.dir.as_slice());
         for path in &res {
-            println!("dir {}", path.to_string_lossy());
+            println!("dir {}", path);
         }
         if self.args.cwd {
-            let cwd = std::env::current_dir()?;
+            let cwd = remove_trailing_slash_single(&std::env::current_dir()?);
             res.push(cwd);
         }
         Ok(res)
