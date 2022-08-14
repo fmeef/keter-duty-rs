@@ -30,6 +30,7 @@
 	(path "/sbin")
 	(path "/opt/")
 	(path "/Library")
+	(path "/Applications")
 	(regex #"^/Users/{{ username }}/.config/.*")
 	(regex #"^/opt/.*")
 	(regex #"^/Users/{{ username }}/.local/share/.*")
@@ -40,4 +41,5 @@
 	(regex #"^/Library/.*")
 	(regex #"^/sbin/.*")
 	(regex #"^/System/.*")
+	(regex #"^/Applications/.*")
 )

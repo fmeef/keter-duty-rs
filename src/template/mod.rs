@@ -62,9 +62,6 @@ impl SandboxTemplate {
 
     pub(crate) fn get_dirs_list(&self) -> Result<Vec<String>> {
         let mut res = remove_trailing_slash(self.args.dir.as_slice());
-        for path in &res {
-            println!("dir {}", path);
-        }
         if self.args.cwd {
             let cwd = remove_trailing_slash_single(&std::env::current_dir()?);
             res.push(cwd);
@@ -86,7 +83,6 @@ impl SandboxTemplate {
             .get()
             .unwrap()
             .render(template.as_ref(), &context)?;
-        println!("{}", template);
         Ok(template)
     }
 

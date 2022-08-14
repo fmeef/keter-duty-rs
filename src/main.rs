@@ -13,10 +13,8 @@ struct Args {
     /// Relative path of the sandbox config
     name: String,
 
-    /// Path of the executable to sandbox
-    exe: PathBuf,
-
     /// Alternative templates directory
+    #[clap(long, short)]
     templates_dir: Option<PathBuf>,
 
     /// allow access to the current working directory
@@ -27,8 +25,10 @@ struct Args {
     #[clap(short, long)]
     dir: Vec<PathBuf>,
 
+    /// Path of the executable to sandbox
+    exe: PathBuf,
+
     /// Arguments to pass to the executable
-    #[clap(last = true)]
     args: Vec<String>,
 }
 
