@@ -25,6 +25,10 @@ struct Args {
     #[clap(short, long)]
     dir: Vec<PathBuf>,
 
+    /// Set $HOME env variable to alternate home
+    #[clap(short, long)]
+    home: Option<PathBuf>,
+
     /// Path of the executable to sandbox
     exe: PathBuf,
 
@@ -43,7 +47,7 @@ fn run_sb(args: Args) -> Result<()> {
 
     let template = templates.run_template(&args.name)?;
 
-    utils::sandbox_exec(&template, &args.exe, &args.args)?;
+    utils::sandbox_exec(&template, &args.exe, &args.args, &args.home)?;
 
     Ok(())
 }

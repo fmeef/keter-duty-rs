@@ -20,8 +20,22 @@ pub(crate) fn get_library_path() -> Result<PathBuf> {
 }
 
 /// Runs sandbox-exec process with rendered template
-pub(crate) fn sandbox_exec(rendered: &str, path: &Path, args: &[String]) -> Result<()> {
+pub(crate) fn sandbox_exec(
+    rendered: &str,
+    path: &Path,
+    args: &[String],
+    home: &Option<PathBuf>,
+) -> Result<()> {
+    let envs = std::env::vars().map(|(k, v)| {
+        if k == "HOME" {
+            if let Some(home) = home {
+                return (k, home.to_string_lossy().into_owned());
+            }
+        }
+        (k, v)
+    });
     Command::new("sandbox-exec")
+        .envs(envs)
         .arg("-p")
         .arg(rendered)
         .arg(path)
