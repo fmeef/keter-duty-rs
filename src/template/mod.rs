@@ -47,6 +47,9 @@ impl SandboxTemplate {
 
     pub(crate) fn get_dirs_list(&self) -> Result<Vec<PathBuf>> {
         let mut res = self.args.dir.clone();
+        for path in &res {
+            println!("dir {}", path.to_string_lossy());
+        }
         if self.args.cwd {
             let cwd = std::env::current_dir()?;
             res.push(cwd);
@@ -62,6 +65,7 @@ impl SandboxTemplate {
         let dirs = self.get_dirs_list()?;
 
         context.insert("rwfiles", &dirs);
+        context.insert("executable", &self.args.exe);
         let template = self
             .tera
             .get()

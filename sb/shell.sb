@@ -1,20 +1,43 @@
 (version 1)
 ;; Disallow everything by default
-(allow default)
+(deny default)
 
+(import "system.sb") 
+(system-graphics)
+(system-network)
 
-(deny file-read* file-write*
-		(regex #"^/Users/{{ username }}/.*")
-)
+(allow process-fork)
+(allow signal)
+(allow file-ioctl)
+(allow system-socket)
+(allow mach-lookup)
+(allow process-exec*)
+(allow user-preference-read)
 
-(deny file-write* 
-	(regex #"^/opt/.*")
-	(regex #"^/usr/local/.*")
-)
-
-(deny user-preference-read user-preference-write)
-(deny iokit-open)
-(deny system-socket)
 
 {{ include (path= "files.sb") }}
 
+(allow file-read* 
+	(path "/Users")
+	(path "/Users/{{ username }}")
+	(path "/Users/{{ username }}/.config")
+	(path "/Users/{{ username }}/.local/share")
+	(path "/System")
+	(path "/usr")
+	(path "/dev")
+	(path "/etc")
+	(path "/bin")
+	(path "/sbin")
+	(path "/opt/")
+	(path "/Library")
+	(regex #"^/Users/{{ username }}/.config/.*")
+	(regex #"^/opt/.*")
+	(regex #"^/Users/{{ username }}/.local/share/.*")
+	(regex #"^/usr/.*")
+	(regex #"^/etc/.*")
+	(regex #"^/bin/.*")
+	(regex #"^/dev/.*")
+	(regex #"^/Library/.*")
+	(regex #"^/sbin/.*")
+	(regex #"^/System/.*")
+)

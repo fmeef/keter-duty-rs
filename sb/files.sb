@@ -1,4 +1,5 @@
 (allow file-read* file-write*
+	(path "{{ executable }}")
 {% for file in rwfiles -%}
 	(path "{{ file }}")
 	(regex #"^{{ file }}/.*")
