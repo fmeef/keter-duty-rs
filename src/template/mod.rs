@@ -16,12 +16,14 @@ where
     func
 }
 
+/// sandbox-exec is very particular about trailing slashes on paths.
 fn remove_trailing_slash(path: &[PathBuf]) -> Vec<String> {
     path.iter()
         .map(|v| remove_trailing_slash_single(v))
         .collect()
 }
 
+/// sandbox-exec is very particular about trailing slashes on paths.
 fn remove_trailing_slash_single(v: &PathBuf) -> String {
     let v = v.to_string_lossy();
     if v.ends_with("/") {

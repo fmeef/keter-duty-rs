@@ -3,3 +3,17 @@
 (deny default)
 
 {{ include (path= "app.sb") }}
+(allow device-microphone)
+(allow device-camera)
+(allow network-outbound)
+(allow network-inbound)
+(allow distributed-notification-post)
+(allow file-read* file-write*
+	(path "/Users/{{ username }}")
+	(path "/Users/{{ username }}/Library/Application Support/zoom.us")
+	(path "/Applications/zoom.us.app")
+	(path "/Users/{{ username }}/Library/Logs/zoom.us")
+	(regex #"^/Users/{{ username }}/Library/Logs/zoom.us/.*")
+	(regex #"^/Users/{{ username }}/Library/Application Support/zoom.us/.*")
+	(regex #"^/Applications/zoom.us.app/.*")
+)
