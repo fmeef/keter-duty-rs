@@ -1,4 +1,8 @@
-use std::{collections::HashMap, path::PathBuf, sync::Arc};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+    sync::Arc,
+};
 
 use crate::{utils, Args};
 use anyhow::Result;
@@ -24,7 +28,7 @@ fn remove_trailing_slash(path: &[PathBuf]) -> Vec<String> {
 }
 
 /// sandbox-exec is very particular about trailing slashes on paths.
-fn remove_trailing_slash_single(v: &PathBuf) -> String {
+fn remove_trailing_slash_single(v: &Path) -> String {
     let v = v.to_string_lossy();
     if v.ends_with("/") {
         v[0..v.len() - 1].to_owned()
@@ -62,13 +66,23 @@ impl SandboxTemplate {
         Ok(())
     }
 
-    pub(crate) fn get_dirs_list(&self) -> Result<Vec<String>> {
-        let mut res = remove_trailing_slash(self.args.dir.as_slice());
+    pub(crate) fn get_dirs_list(&self) -> Result<(Vec<String>, Vec<String>)> {
+        let dirs = self.args.dir.as_slice();
+        let mut res = remove_trailing_slash(dirs);
+        let mut ancestors = dirs
+            .iter()
+            .flat_map(|v| v.ancestors())
+            .map(|v| remove_trailing_slash_single(v))
+            .collect::<Vec<String>>();
+
         if self.args.cwd {
-            let cwd = remove_trailing_slash_single(&std::env::current_dir()?);
+            let dir = std::env::current_dir()?;
+            let cwd = remove_trailing_slash_single(&dir);
+            let da = dir.ancestors().map(|v| remove_trailing_slash_single(v));
             res.push(cwd);
+            ancestors.extend(da);
         }
-        Ok(res)
+        Ok((res, ancestors))
     }
 
     /// Render a single template
@@ -76,15 +90,19 @@ impl SandboxTemplate {
         let mut context = Context::new();
         context.insert("username", &username());
 
-        let dirs = self.get_dirs_list()?;
+        let (dirs, ancestors) = self.get_dirs_list()?;
 
         context.insert("rwfiles", &dirs);
+        context.insert("rodirs", &ancestors);
         context.insert("executable", &self.args.exe);
         let template = self
             .tera
             .get()
             .unwrap()
             .render(template.as_ref(), &context)?;
+
+        println!("fmef");
+
         Ok(template)
     }
 

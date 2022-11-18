@@ -5,3 +5,11 @@
 	(regex #"^{{ file }}/.*")
 {%- endfor %}
 )
+
+(allow file-read*
+{% for file in rodirs -%}
+	(path "{{ file }}")
+{%- endfor %}
+)
+
+
