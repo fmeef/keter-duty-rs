@@ -22,7 +22,7 @@
 	(ipc-posix-name-regex #".*com.apple.csseed.*")
 )
 
-(allow iokit-open
+(allow iokit-open*
 		(iokit-user-client-class "IOHIDParamUserClient")
     (iokit-registry-entry-class "AppleGraphicsControlClient")
     (iokit-registry-entry-class "IGAccelCommandQueue")
@@ -43,11 +43,8 @@
     (iokit-registry-entry-class "nvFermiGLContext")
     (iokit-registry-entry-class "nvSharedUserClient")
 		(iokit-user-client-class "AppleUSBHostInterfaceUserClient")
-)
-
-(allow iokit-open-user-client
-		(iokit-user-client-class "AppleUSBHostInterfaceUserClient")			
-)
+		(iokit-user-client-class "AppleUSBHostInterfaceUserClient")
+		(iokit-user-client-class "AppleUSBHostDeviceUserClient"))
 
 (allow file-ioctl
 		(regex #"^/dev/.*")
