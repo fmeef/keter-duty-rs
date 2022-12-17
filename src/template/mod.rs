@@ -101,8 +101,6 @@ impl SandboxTemplate {
             .unwrap()
             .render(template.as_ref(), &context)?;
 
-        println!("fmef");
-
         Ok(template)
     }
 
