@@ -12,6 +12,7 @@ directories = "4.0.1"
 include_dir = "0.7.2"
 once_cell = "1.12.0"
 tera = "1.15.0"
+walkdir = "2.3.2"
 whoami = "1.2.1"
 
 [features]

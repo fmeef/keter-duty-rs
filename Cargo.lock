@@ -367,6 +367,7 @@ dependencies = [
  "include_dir",
  "once_cell",
  "tera",
+ "walkdir",
  "whoami",
 ]
 

@@ -6,6 +6,7 @@ use include_dir::{Dir, DirEntry};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use walkdir::WalkDir;
 /// Default sandbox templates
 pub(crate) static SANDBOX_DIR: Dir<'_> = include_dir!("sb");
 
@@ -48,14 +49,13 @@ pub(crate) fn sandbox_exec(
 /// Check if the library directory contains a given name
 pub(crate) fn library_path_contains(name: &str) -> Result<bool> {
     let p = get_library_path()?;
-    for dir in p.read_dir()? {
-        if let Ok(dir) = dir {
-            if dir.file_name() == name {
-                return Ok(true);
-            }
-        }
-    }
-    Ok(false)
+
+    let d = WalkDir::new(p)
+        .into_iter()
+        .filter_map(|d| d.ok())
+        .find(|d| d.file_name() == name)
+        .is_some();
+    Ok(d)
 }
 
 /// Copy over default templates to config directory.
