@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use clap::Parser;
 use std::{path::PathBuf, sync::Arc};
 use template::SandboxTemplate;
@@ -52,8 +52,26 @@ fn run_sb(args: Args) -> Result<()> {
     Ok(())
 }
 
+// A common mistake is to enable the cwd flag in the home directory, causing everything to become writable
+// attempt to prevent this
+fn check_home(args: &Args) -> Result<()> {
+    let home = dirs::home_dir().ok_or_else(|| anyhow!("cry"))?;
+    if args.cwd && std::env::current_dir()?.eq(&home) {
+        eprint!("Allowing write access to home directory. This is a potential security risk Are you sure? (y/n): ");
+        let mut buf = String::new();
+        let stdin = std::io::stdin();
+        stdin.read_line(&mut buf)?;
+        if buf != "y" {
+            return Err(anyhow!("aborted"));
+        }
+    }
+
+    Ok(())
+}
+
 fn main() -> Result<()> {
     let args = Args::parse();
+    check_home(&args)?;
     if utils::SANDBOX_DIR.contains(&args.name) || library_path_contains(&args.name).unwrap() {
         crate::run_sb(args).unwrap();
     } else {

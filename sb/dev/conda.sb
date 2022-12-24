@@ -1,0 +1,6 @@
+{{ include ( path = "shell.sb") }}
+(allow network*)
+(allow file-read* file-write* 
+  (path "/home/{{ username }}/.conda")
+  (regex #"^/home/{{ username }}/.conda/.*")
+)

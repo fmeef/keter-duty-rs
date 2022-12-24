@@ -53,7 +53,7 @@ pub(crate) fn library_path_contains(name: &str) -> Result<bool> {
     let d = WalkDir::new(p)
         .into_iter()
         .filter_map(|d| d.ok())
-        .find(|d| d.file_name() == name)
+        .find(|d| d.path().to_str().unwrap_or("").contains(name))
         .is_some();
     Ok(d)
 }

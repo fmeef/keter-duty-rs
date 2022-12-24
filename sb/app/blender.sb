@@ -1,5 +1,16 @@
 (version 1)
 ;; Disallow everything by default
 (deny default)
-
 {{ include (path= "app.sb") }}
+(allow network*)
+
+(allow file-read* file-write*
+    (path "/Users/{{ username }}/Library/Application Support/Blender")
+    (regex #"^/Users/{{ username }}/Library/Application Support/Blender/.*")
+    (path "/Users/{{ username }}/Library/Caches/pip")
+    (regex #"^/Users/{{ username }}/Library/Caches/pip/.*")
+    (path "/Users/{{ username }}/.local/lib")
+    (regex #"^/Users/{{ username }}/.local/lib")
+    (path "/Users/khanson/.thumbnails")
+    (regex #"^/Users/khanson/.thumbnails/.*")
+)

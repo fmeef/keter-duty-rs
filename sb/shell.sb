@@ -17,6 +17,15 @@
 
 {{ include (path= "files.sb") }}
 
+(allow file-read* file-write* 
+	(path "/tmp")
+	(path "/private/var")
+	(regex #"^/tmp/.*")
+	(regex #"^/private/var/.*")
+)
+
+(allow ipc-posix*)
+
 (allow file-read* 
 	(path "/Users")
 	(path "/Users/{{ username }}")
@@ -25,14 +34,16 @@
 	(path "/System")
 	(path "/usr")
 	(path "/dev")
-	(path "/etc")
+		(path "/etc")
 	(path "/bin")
 	(path "/sbin")
-	(path "/opt/")
+	(path "/opt")
 	(path "/Library")
+	(path "/private")
 	(path "/Applications")
 	(regex #"^/Users/{{ username }}/.config/.*")
 	(regex #"^/opt/.*")
+	(regex #"^/private/.*")
 	(regex #"^/Users/{{ username }}/.local/share/.*")
 	(regex #"^/usr/.*")
 	(regex #"^/etc/.*")
