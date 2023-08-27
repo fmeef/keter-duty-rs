@@ -51,8 +51,9 @@
 )
 
 
-(allow file-write* file-read* file-read-metadata
-    (regex #"^/private/var/.*")
+(allow file-write* file-read*
+	(path "/private/var/folders")
+    (regex #"^/private/var/folders/.*")
 )
 
 (allow sysctl-read 

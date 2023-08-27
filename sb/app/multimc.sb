@@ -8,17 +8,17 @@
 			 (path "/Users/{{ username }}")
 			 )
 (allow file-read* file-write*
-		(path "/Users/{{ username }}/Documents/game/ManyMC.app")
+		(path "/Users/{{ username }}/Documents/game/Prism Launcher.app")
 		(path "/Users/{{ username }}/Library/Caches/JNA")
 		(path "/private/tmp")
-		(regex  #"^/Users/{{ username }}/Documents/game/ManyMC.app/.*")
+		(regex  #"^/Users/{{ username }}/Documents/game/Prism Launcher.app/.*")
 		(regex  #"^/Users/{{ username }}/Library/Caches/JNA.*")
 		(regex  #"^/private/tmp/.*")
 		(path "/Users/{{ username }}/Documents/game/m1-multimc-hack")
-		(path "/Users/{{ username }}/Library/Application Support/ManyMC")
-		(regex  #"^/Users/{{ username }}/Library/Application\ Support/ManyMC/.*")
+		(path "/Users/{{ username }}/Library/Application Support/PrismLauncher")
+		(regex  #"^/Users/{{ username }}/Library/Application\ Support/PrismLauncher/.*")
 		(regex  #"^/Users/{{ username }}/Documents/game/m1-multimc-hack/.*")
-    (regex #"/private/var/folders/pz/.+/[A-Z]/.*ManyMC.*")
+    (regex #"/private/var/folders/pz/.+/[A-Z]/.*PrismLauncher.*")
 )
 
 
@@ -26,7 +26,9 @@
 (global-name "com.apple.CARenderServer")
 (global-name "com.apple.speech.speechsynthesisd.x86_64")
 			)
-
+(allow iokit-open-user-client
+(iokit-user-client-class "IOHIDLibUserClient")
+)
 (allow user-preference-read
 (preference-domain "com.apple.HIToolbox")
 )

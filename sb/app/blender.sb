@@ -4,7 +4,7 @@
 {{ include (path= "app.sb") }}
 (allow network*)
 
-(allow file-read* file-write*
+(allow file-read* file-write* file-issue-extension
     (path "/Users/{{ username }}/Library/Application Support/Blender")
     (regex #"^/Users/{{ username }}/Library/Application Support/Blender/.*")
     (path "/Users/{{ username }}/Library/Caches/pip")
@@ -13,4 +13,14 @@
     (regex #"^/Users/{{ username }}/.local/lib")
     (path "/Users/khanson/.thumbnails")
     (regex #"^/Users/khanson/.thumbnails/.*")
+    (regex #"^/private/var/folders/.*")
+    (path "/private/var/folders")
+   (regex #"^/Applications/Blender.app*")
+
+    (path "/Applications/Blender.app")
+)
+
+
+(allow mach-lookup
+	(xpc-service-name "com.apple.MTLCompilerService")
 )

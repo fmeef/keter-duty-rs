@@ -11,8 +11,10 @@
 		(regex #"^/dev/.*")
 		(path "/dev")
 		(path "/Library/Preferences/com.apple.networkd.plist")
+		(path "/Users/{{ username }}/Library/Preferences")
 		(regex #"^/bin/.*")
-		
+		(path "/opt/homebrew")
+		(regex #"^/opt/homebrew/.*")
 		(path "/Users/{{ username }}/Library/Caches")
 		(path "/Users/{{ username }}/.gitconfig")
 )
@@ -54,16 +56,18 @@
 (allow network-outbound)
 (allow network-inbound)
 (allow file-read* file-write*
+		(path "/Users/{{ username }}/.emulator_console_auth_token")
 		(path "/Applications/Android Studio.app")
 		(regex #"^/Applications/Android Studio.app/.*")
+		(regex #"^/Users/{{ username }}/\.robolectric.*")
 	 	(path "/Users/{{ username }}/Library/Saved Application State")
 	 	(regex #"^/Users/{{ username }}/Library/Saved Application State/.*")
 
 	 	(path "/Users/{{ username }}/Library/Application Support/Google")
 	 	(regex #"^/Users/{{ username }}/Library/Application Support/Google/.*")
 		
-	 	(path "/Users/{{ username }}/Library/Caches/Google")
-	 	(regex #"^/Users/{{ username }}/Library/Caches/Google/.*")
+	 	(path "/Users/{{ username }}/Library/Caches")
+	 	(regex #"^/Users/{{ username }}/Library/Caches/.*")
 		
 	 	(path "/Users/{{ username }}/Library/Caches/TemporaryItems/avd")
 	 	(regex #"^/Users/{{ username }}/Library/Caches/TemporaryItems/avd/.*")		
