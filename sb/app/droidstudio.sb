@@ -63,6 +63,8 @@
 	 	(path "/Users/{{ username }}/Library/Saved Application State")
 	 	(regex #"^/Users/{{ username }}/Library/Saved Application State/.*")
 
+	 	(path "/Users/{{ username }}/.gnupg/")
+	 	(regex #"^/Users/{{ username }}/.gnupg/.*")
 	 	(path "/Users/{{ username }}/Library/Application Support/Google")
 	 	(regex #"^/Users/{{ username }}/Library/Application Support/Google/.*")
 		
