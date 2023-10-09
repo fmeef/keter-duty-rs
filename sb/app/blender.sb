@@ -15,7 +15,7 @@
     (regex #"^/Users/khanson/.thumbnails/.*")
     (regex #"^/private/var/folders/.*")
     (path "/private/var/folders")
-   (regex #"^/Applications/Blender.app*")
+   (regex #"^/Applications/Blender.app/.*")
 
     (path "/Applications/Blender.app")
 )
