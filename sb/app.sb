@@ -14,7 +14,13 @@
 (allow user-preference-read)
 ;(deny network-bind (regex "^/Users/{{ username }}/.*"))
 (deny network-outbound (regex "^/Users/{{ username }}/.*"))
-(allow file-read*
+
+(allow network-outbound 
+	(regex "^/Users/{{ username }}/.local/*")
+	(regex "^/Users/{{ username }}/Library/Developer/*")
+	(regex "^/Users/{{ username }}/Library/Apple/*")
+)
+(allow file-read* network-outbound
     (path "/Library")
     (path "/System/Library")
 		(path "/usr")

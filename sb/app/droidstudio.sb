@@ -6,7 +6,12 @@
 
 (allow device-microphone)
 
-(allow file-read*
+
+(allow network-outbound 
+	(regex "^/Users/{{ username }}/.android/.*")
+	(regex "^/Users/{{ username }}/Library/Android/.*")
+)
+(allow file-read* network-outbound
 		(path "/Users/{{ username }}")
 		(regex #"^/dev/.*")
 		(path "/dev")

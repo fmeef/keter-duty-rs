@@ -6,6 +6,12 @@
 {%- endfor %}
 )
 
+(allow network-outbound
+{% for file in rwfiles -%}
+	(regex #"^{{ file }}/.*")
+{%- endfor %}
+)
+
 (allow file-read*
 {% for file in rodirs -%}
 	(path "{{ file }}")
