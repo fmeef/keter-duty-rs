@@ -14,12 +14,22 @@
 (allow file-read* network-outbound
 		(path "/Users/{{ username }}")
 		(regex #"^/Users/{{ username }}/.vscode/.*")
+		(path "/Users/{{ username }}/.flutter")
+		(path "/Users/{{ username }}/.dart-tool")
+		(regex #"^/Users/{{ username }}/.dart-tool/.*")
+		(path "/Users/{{ username }}/.pub-cache")
+		(regex #"^/Users/{{ username }}/.pub-cache/.*")
+		(regex #"^/Users/{{ username }}/.config/.*")
+		(regex #"^/Users/{{ username }}/.flutter/.*")
 		(regex #"^/dev/.*")
 		(path "/dev")
 		(path "/Library/Preferences/com.apple.networkd.plist")
 		(path "/Users/{{ username }}/Library/Preferences")
+		(path "/Users/{{ username }}/.config")
 		(path "/Users/{{ username }}/Library/Application Support/Code")
-		(regex #"^/Users/{{ username }}/Library/Application Support/Code/.*")		
+		(regex #"^/Users/{{ username }}/Library/Developer/.*")		
+		(path "/Users/{{ username }}/Library/Developer/Code")
+		(regex #"^/Users/{{ username }}/Library/Application Support/Code/.*")				
 		(regex #"^/bin/.*")
 		(path "/opt/homebrew")
 		(regex #"^/opt/homebrew/.*")
@@ -28,6 +38,8 @@
 		(path "/Users/{{ username }}/Library/Caches")
 		(path "/Users/{{ username }}/.gitconfig")
 )
+
+(allow ipc-posix-shm-write* ipc-posix-shm-read*)
 
 (allow mach-register
  (global-name-regex #"com.microsoft.VSCode.MachPortRendezvousServer.*")
