@@ -66,8 +66,7 @@ impl SandboxTemplate {
         Ok(())
     }
 
-    pub(crate) fn get_dirs_list(&self) -> Result<(Vec<String>, Vec<String>)> {
-        let dirs = self.args.dir.as_slice();
+    pub(crate) fn get_dirs_list(&self, dirs: &[PathBuf]) -> Result<(Vec<String>, Vec<String>)> {
         let mut res = remove_trailing_slash(dirs);
         let mut ancestors = dirs
             .iter()
@@ -90,10 +89,15 @@ impl SandboxTemplate {
         let mut context = Context::new();
         context.insert("username", &username());
 
-        let (dirs, ancestors) = self.get_dirs_list()?;
+        let (dirs, mut ancestors) = self.get_dirs_list(&self.args.dir)?;
+
+        let (rodirs, roancestors) = self.get_dirs_list(&self.args.ro)?;
+
+        ancestors.extend_from_slice(&roancestors);
 
         context.insert("rwfiles", &dirs);
-        context.insert("rodirs", &ancestors);
+        context.insert("ancestors", &ancestors);
+        context.insert("rofiles", &rodirs);
         context.insert("executable", &self.args.exe);
         let template = self
             .tera

@@ -25,6 +25,10 @@ struct Args {
     #[clap(short, long)]
     dir: Vec<PathBuf>,
 
+    /// List of readonly directories to allow
+    #[clap(short, long)]
+    ro: Vec<PathBuf>,
+
     /// Set $HOME env variable to alternate home
     #[clap(short, long)]
     home: Option<PathBuf>,

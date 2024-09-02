@@ -14,10 +14,17 @@
 {%- endfor %}
 )
 
-(allow file-read*
+(allow file-read* process-exec*
 	(path "/dev/null")
-{% for file in rodirs -%}
+{% for file in ancestors -%}
 	(path "{{ file }}")
+{%- endfor %}
+)
+(allow file-read* process-exec*
+	(path "/dev/null")
+{% for file in rofiles -%}
+	(path "{{ file }}")
+	(regex #"^{{ file }}/.*")
 {%- endfor %}
 )
 
