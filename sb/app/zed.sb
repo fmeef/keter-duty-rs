@@ -13,10 +13,13 @@
 )
 (allow file-read* network-outbound
 		(path "/Users/{{ username }}")
+		(regex #"^/Users/{{ username }}/.vscode/.*")
 		(regex #"^/dev/.*")
 		(path "/dev")
 		(path "/Library/Preferences/com.apple.networkd.plist")
 		(path "/Users/{{ username }}/Library/Preferences")
+		(path "/Users/{{ username }}/Library/Application Support/Code")
+		(regex #"^/Users/{{ username }}/Library/Application Support/Code/.*")		
 		(regex #"^/bin/.*")
 		(path "/opt/homebrew")
 		(regex #"^/opt/homebrew/.*")
@@ -24,6 +27,10 @@
 		(regex #"^/usr/.*")
 		(path "/Users/{{ username }}/Library/Caches")
 		(path "/Users/{{ username }}/.gitconfig")
+)
+
+(allow mach-register
+ (global-name-regex #"com.microsoft.VSCode.MachPortRendezvousServer.*")
 )
 
 (allow ipc-posix-shm*
@@ -71,8 +78,6 @@
 	(regex #"^/Users/{{ username }}/.cache/zed/.*")
 	(path "/Users/{{ username }}/cargo_sandbox/")
 	(regex #"^/Users/{{ username }}/cargo_sandbox/*")
-	(path "/Users/{{ username }}/cargo_sandbox/.rustup")
-	(regex #"^/Users/{{ username }}/cargo_sandbox/.rustup/.*")
 	(regex #"^/dev/tty.*")
 	(path "/dev/ptmx")
 )

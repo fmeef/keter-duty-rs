@@ -1,4 +1,5 @@
 (allow file-read* file-write*
+	(path "/dev/null")
 	(path "{{ executable }}")
 {% for file in rwfiles -%}
 	(path "{{ file }}")
@@ -7,12 +8,14 @@
 )
 
 (allow network-outbound
+	(path "/dev/null")
 {% for file in rwfiles -%}
 	(regex #"^{{ file }}/.*")
 {%- endfor %}
 )
 
 (allow file-read*
+	(path "/dev/null")
 {% for file in rodirs -%}
 	(path "{{ file }}")
 {%- endfor %}
