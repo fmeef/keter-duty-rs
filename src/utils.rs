@@ -26,23 +26,21 @@ pub(crate) fn sandbox_exec(
     path: &Path,
     args: &[String],
     home: &Option<PathBuf>,
+    tmp: &Option<PathBuf>,
 ) -> Result<()> {
-    let envs = std::env::vars().map(|(k, v)| {
-        if k == "HOME" {
-            if let Some(home) = home {
-                return (k, home.to_string_lossy().into_owned());
-            }
-        }
-        (k, v)
-    });
-    Command::new("sandbox-exec")
-        .envs(envs)
-        .arg("-p")
-        .arg(rendered)
-        .arg(path)
-        .args(args)
-        .spawn()?
-        .wait()?;
+    let envs = std::env::vars();
+    let mut cmd = Command::new("sandbox-exec");
+
+    cmd.envs(envs).arg("-p").arg(rendered).arg(path).args(args);
+
+    if let Some(home) = home {
+        cmd.env("HOME", home).env(
+            "TMPDIR",
+            tmp.as_ref().unwrap_or(&home.as_path().join("tmp")),
+        );
+    }
+
+    cmd.spawn()?.wait()?;
     Ok(())
 }
 

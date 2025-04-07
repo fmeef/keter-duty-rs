@@ -21,6 +21,7 @@
 	(regex "^/Users/{{ username }}/Library/Apple/*")
 )
 (allow file-read* network-outbound
+		(path "/nix")
     (path "/Library")
     (path "/System/Library")
 		(path "/usr")
@@ -39,6 +40,7 @@
     (path "/Users/{{ username }}/Library/Keyboard Layouts")
     (path "/Users/{{ username }}/Library/Input Methods")
 		(regex #"^/Library/.*")
+		(regex #"^/nix/.*")
 		(regex #"^/dev/fd/.*")
 		(regex #"^/opt/homebrew/.*")
 		(regex #"^/System/Library/.*")
