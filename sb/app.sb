@@ -22,6 +22,8 @@
 )
 (allow file-read* network-outbound
 		(path "/nix")
+		(path "/Users/{{ username }}/.nix-profile")
+		(path "/Users/{{ username }}/.local/state/nix")
     (path "/Library")
     (path "/System/Library")
 		(path "/usr")
@@ -38,7 +40,9 @@
     (path "/Users/{{ username }}/Library")
     (path "/Users/{{ username }}/Library/Application Support")
     (path "/Users/{{ username }}/Library/Keyboard Layouts")
-    (path "/Users/{{ username }}/Library/Input Methods")
+    (path "/Users/{{ username }}/Library/Input Methods")    
+		(regex #"^/Users/{{ username }}/.nix-profile/.*")
+		(regex #"^/Users/{{ username }}/.local/state/nix/.*")
 		(regex #"^/Library/.*")
 		(regex #"^/nix/.*")
 		(regex #"^/dev/fd/.*")
@@ -64,6 +68,8 @@
 	(path "/private/var/folders")
     (regex #"^/private/var/folders/.*")
 )
+
+(allow sysctl-write (sysctl-name "kern.curproc_arch_affinity"))
 
 (allow sysctl-read 
     (sysctl-name "debug.intel.gstLevelGST")

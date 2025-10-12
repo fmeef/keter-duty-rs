@@ -17,12 +17,12 @@
 
 {{ include (path= "files.sb") }}
 
-(allow file-read* file-write* 
-	(path "/tmp")
-	(path "/private/var")
-	(regex #"^/tmp/.*")
-	(regex #"^/private/var/.*")
-)
+; (allow file-read* file-write* 
+; 	(path "/tmp")
+; 	(path "/private/var")
+; 	(regex #"^/tmp/.*")
+; 	(regex #"^/private/var/.*")
+; )
 
 (allow ipc-posix*)
 

@@ -11,6 +11,7 @@
 	(regex "^/Users/{{ username }}/.android/.*")
 	(regex "^/Users/{{ username }}/Library/Android/.*")
 )
+
 (allow file-read* network-outbound
 		(path "/Users/{{ username }}")
 		(regex #"^/Users/{{ username }}/.vscode/.*")
@@ -40,6 +41,8 @@
 		(regex #"^/usr/.*")
 		(path "/Users/{{ username }}/Library/Caches")
 		(path "/Users/{{ username }}/.gitconfig")
+		(path "/Applications/IntelliJ IDEA CE.app")
+		(regex #"^/Applications/IntelliJ IDEA CE.app/.*")
 )
 
 (allow ipc-posix-shm-write* ipc-posix-shm-read*)
@@ -48,9 +51,18 @@
  (global-name-regex #"com.microsoft.VSCode.MachPortRendezvousServer.*")
 )
 
+(allow mach-lookup
+	(global-name "com.apple.contactsd.persistence")
+	(global-name "com.apple.diagnosticd")
+)
+
 (allow ipc-posix-shm*
 	(ipc-posix-name "com.apple.AppleDatabaseChanged")
 	(ipc-posix-name-regex #".*com.apple.csseed.*")
+)
+
+(allow user-preference-read user-preference-write
+	(preference-domain "com.example.subrosa")
 )
 
 (allow iokit-open*
@@ -101,3 +113,98 @@
 )
 (allow pseudo-tty)
 (allow network-bind)
+
+
+(allow network-outbound 
+	(regex "^/Users/{{ username }}/.android/.*")
+	(regex "^/Users/{{ username }}/Library/Android/.*")
+)
+(allow file-read* network-outbound
+		(path "/Users/{{ username }}")
+		(regex #"^/dev/.*")
+		(path "/dev")
+		(path "/Library/Preferences/com.apple.networkd.plist")
+		(path "/Users/{{ username }}/Library/Preferences")
+		(regex #"^/bin/.*")
+		(path "/opt/homebrew")
+		(regex #"^/opt/homebrew/.*")
+		(path "/Users/{{ username }}/Library/Caches")
+		(path "/Users/{{ username }}/.gitconfig")
+)
+
+(allow ipc-posix-shm*
+	(ipc-posix-name "com.apple.AppleDatabaseChanged")
+	(ipc-posix-name-regex #".*com.apple.csseed.*")
+)
+
+(allow iokit-open*
+		(iokit-user-client-class "IOHIDParamUserClient")
+    (iokit-registry-entry-class "AppleGraphicsControlClient")
+    (iokit-registry-entry-class "IGAccelCommandQueue")
+    (iokit-registry-entry-class "IGAccelDevice")
+    (iokit-registry-entry-class "IGAccelGLContext")
+    (iokit-registry-entry-class "IGAccelSharedUserClient")
+    (iokit-registry-entry-class "IGAccelVideoContextMain")
+    (iokit-registry-entry-class "IGAccelVideoContextMedia")
+    (iokit-registry-entry-class "IOAudioControlUserClient")
+    (iokit-registry-entry-class "IOAudioEngineUserClient")
+    (iokit-registry-entry-class "IOFramebufferSharedUserClient")
+    (iokit-registry-entry-class "IOHIDLibUserClient")
+    (iokit-registry-entry-class "IOHIDParamUserClient")
+    (iokit-registry-entry-class "IOSurfaceRootUserClient")
+    (iokit-registry-entry-class "IOSurfaceSendRight")
+    (iokit-registry-entry-class "RootDomainUserClient")
+    (iokit-registry-entry-class "nvDevice")
+    (iokit-registry-entry-class "nvFermiGLContext")
+    (iokit-registry-entry-class "nvSharedUserClient")
+		(iokit-user-client-class "AppleUSBHostInterfaceUserClient")
+		(iokit-user-client-class "AppleUSBHostInterfaceUserClient")
+		(iokit-user-client-class "AppleUSBHostDeviceUserClient"))
+
+(allow file-ioctl
+		(regex #"^/dev/.*")
+		(path "/dev")
+			 )
+(allow system-fsctl)
+(allow network-outbound)
+(allow network-inbound)
+(allow file-read* file-write*
+		(path "/Users/{{ username }}/.emulator_console_auth_token")
+		(path "/Applications/Android Studio.app")
+		(regex #"^/Applications/Android Studio.app/.*")
+		(regex #"^/Users/{{ username }}/\.robolectric.*")
+	 	(path "/Users/{{ username }}/Library/Saved Application State")
+	 	(regex #"^/Users/{{ username }}/Library/Saved Application State/.*")
+
+	 	(path "/Users/{{ username }}/.gnupg/")
+	 	(regex #"^/Users/{{ username }}/.gnupg/.*")
+	 	(path "/Users/{{ username }}/Library/Application Support/Google")
+	 	(regex #"^/Users/{{ username }}/Library/Application Support/Google/.*")
+		
+	 	(path "/Users/{{ username }}/Library/Caches")
+	 	(regex #"^/Users/{{ username }}/Library/Caches/.*")
+		
+	 	(path "/Users/{{ username }}/Library/Caches/TemporaryItems/avd")
+	 	(regex #"^/Users/{{ username }}/Library/Caches/TemporaryItems/avd/.*")		
+	 	
+		(path "/Users/{{ username }}/Library/Logs/Google")
+	 	(regex #"^/Users/{{ username }}/Library/Logs/Google/.*")
+		
+	 	(path "/Users/{{ username }}/Library/Android")
+	 	(regex #"^/Users/{{ username }}/Library/Android/.*")
+		
+	 	(path "/Users/{{ username }}/.android")
+	 	(regex #"^/Users/{{ username }}/.android/.*")
+
+	 	(path "/Users/{{ username }}/.gradle")
+	 	(regex #"^/Users/{{ username }}/.gradle/.*")
+		
+	 	(path "/Users/{{ username }}/.m2")
+	 	(regex #"^/Users/{{ username }}/.m2/.*")
+		
+	 	(path "/private/tmp/android-{{ username }}")
+		(regex #"^/private/tmp/android-{{ username }}/.*")
+		
+		(regex #"^/dev/.*")
+)
+

@@ -2,10 +2,19 @@
 ;; Disallow everything by default
 (deny default)
 {{ include (path= "app.sb") }}
-
+;;(allow sysctl-write)
+(allow sysctl-write (sysctl-name "kern.curproc_arch_affinity"))
 (allow network*)
+(allow network-outbound)
 (allow file-read*
 			 (path "/Users/{{ username }}")
+			 (path "/Users/{{ username }}/.CFUserTextEncoding")
+			 (path "/Users/{{ username }}/Library/Java")
+		(regex  #"^/Users/{{ username }}/Library/Java/.*")
+			 (path "/Users/{{ username }}/Library/Caches")
+		(regex  #"^/Users/{{ username }}/Library/Caches/.*")
+			 (path "/Users/{{ username }}/Library/Internet Plug-Ins")
+		(regex  #"^/Users/{{ username }}/Library/Internet Plug-Ins/.*")
 			 )
 (allow file-read* file-write*
 		(path "/Users/{{ username }}/Documents/game/Prism Launcher.app")

@@ -5,6 +5,7 @@
 {{ include (path= "app.sb") }}
 
 (allow device-microphone)
+(allow device-camera)
 
 (allow file-read*
 		(path "/Users/{{ username }}")

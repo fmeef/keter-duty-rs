@@ -1,10 +1,15 @@
 
 
 {{ include ( path = "app.sb") }}
-{{ include ( path = "shell.sb") }}
+;{{ include ( path = "shell.sb") }}
 
 (allow network*)
 (allow file-read* file-write* 
   (path "/home/{{ username }}/.conda")
   (regex #"^/home/{{ username }}/.conda/.*")
+)
+
+
+(allow file-read* file-write*
+ (path "/tmp")
 )
