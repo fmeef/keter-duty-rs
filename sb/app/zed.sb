@@ -63,6 +63,7 @@
 
 (allow user-preference-read user-preference-write
 	(preference-domain "com.example.subrosa")
+	(preference-domain "net.ballmerlabs.kata")
 )
 
 (allow iokit-open*

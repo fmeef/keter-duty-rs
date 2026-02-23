@@ -20,8 +20,13 @@
 	(regex "^/Users/{{ username }}/Library/Developer/*")
 	(regex "^/Users/{{ username }}/Library/Apple/*")
 )
+
 (allow file-read* network-outbound
 		(path "/nix")
+		(path "/run/current-system/sw/bin")
+		(path "/run/current-system/sw")
+		(path "/run/current-system")
+		(path "/run")
 		(path "/Users/{{ username }}/.nix-profile")
 		(path "/Users/{{ username }}/.local/state/nix")
     (path "/Library")
@@ -42,6 +47,7 @@
     (path "/Users/{{ username }}/Library/Keyboard Layouts")
     (path "/Users/{{ username }}/Library/Input Methods")    
 		(regex #"^/Users/{{ username }}/.nix-profile/.*")
+		(regex #"^/run/current-system/sw/bin/.*")
 		(regex #"^/Users/{{ username }}/.local/state/nix/.*")
 		(regex #"^/Library/.*")
 		(regex #"^/nix/.*")
