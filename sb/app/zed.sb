@@ -14,6 +14,7 @@
 
 (allow file-read* network-outbound
 		(path "/Users/{{ username }}")
+		(path "/System")
 		(regex #"^/Users/{{ username }}/.vscode/.*")
 		(path "/Users/{{ username }}/.flutter")
 		(path "/Users/{{ username }}/.dart-tool")
@@ -39,6 +40,7 @@
 		(regex #"^/opt/homebrew/.*")
 		(path "/usr")
 		(regex #"^/usr/.*")
+		(regex #"^/System/.*")
 		(path "/Users/{{ username }}/Library/Caches")
 		(path "/Users/{{ username }}/.gitconfig")
 		(path "/Applications/IntelliJ IDEA CE.app")
@@ -182,8 +184,8 @@
 	 	(path "/Users/{{ username }}/Library/Application Support/Google")
 	 	(regex #"^/Users/{{ username }}/Library/Application Support/Google/.*")
 		
-	 	(path "/Users/{{ username }}/Library/Caches")
-	 	(regex #"^/Users/{{ username }}/Library/Caches/.*")
+	 	; (path "/Users/{{ username }}/Library/Caches")
+	 	; (regex #"^/Users/{{ username }}/Library/Caches/.*")
 		
 	 	(path "/Users/{{ username }}/Library/Caches/TemporaryItems/avd")
 	 	(regex #"^/Users/{{ username }}/Library/Caches/TemporaryItems/avd/.*")		
