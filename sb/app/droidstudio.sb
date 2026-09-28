@@ -62,6 +62,9 @@
 (allow network-inbound)
 (allow file-read* file-write*
 		(path "/Users/{{ username }}/.emulator_console_auth_token")
+		(path "/Users/{{ username }}/.konan")
+		(regex #"^/Users/{{ username }}/\.konan/.*")
+		(regex #"^/Users/{{ username }}/\.config/jgit/.*")
 		(path "/Applications/Android Studio.app")
 		(regex #"^/Applications/Android Studio.app/.*")
 		(regex #"^/Users/{{ username }}/\.robolectric.*")
